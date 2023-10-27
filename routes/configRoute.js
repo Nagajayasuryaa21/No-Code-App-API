@@ -24,29 +24,29 @@ router.post("/add-update", async (req, res) => {
         const newUser = new Config(req.body);
         await newUser.save()
           .then((savedData) => {
-            res.status(200).send({ data: savedData, message: "User saved successfully" });
+            res.status(200).send({status:"success", data: savedData, message: "User saved successfully" });
           })
           .catch((error) => {
             console.error(error);
-            res.status(500).send("Internal server error");
+            res.status(500).send({status:"failed",message:"Internal server error"});
           });
       } else {
         // If the user exists, update their data
         await user.updateOne({ ...req.body })
           .then((savedData) => {
-            res.status(200).send({ data: savedData, message: "User updated successfully" });
+            res.status(200).send({status:"success", data: savedData, message: "User updated successfully" });
           })
           .catch((error) => {
             console.error(error);
-            res.status(500).send("Internal server error");
+            res.status(500).send({status:"failed",message:"Internal server error"});
           });
       }
     } catch (error) {
-      res.status(500).send({ message: "Internal Server Error" + error.message });
+      res.status(500).send({status:"failed", message: "Internal Server Error" + error.message });
     }
   });
 
-  router.post("/get", async (req, res) => {
+  router.get("/get", async (req, res) => {
     res.setHeader('Access-Control-Allow-Credentials', true);
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS, PATCH, DELETE, POST, PUT');
@@ -56,27 +56,24 @@ router.post("/add-update", async (req, res) => {
     );
   
     try {
-      // Find the user by their name
-      const user = await Config.findOne({ name: req.body.name });
-  
-      if (!user) {
-        // If the user does not exist, you can create a new user with the provided data
-        const newUser = new Config(req.body);
-        await newUser.save()
-          .then((savedData) => {
-            res.status(200).send({ data: savedData, message: "User saved successfully" });
-          })
-          .catch((error) => {
-            console.error(error);
-            res.status(500).send("Internal server error");
-          });
+      // Get the 'name' parameter from the query string
+      const clientName = req.query.clientName;
+      console.log(clientName)
+      if (!clientName) {
+        return res.status(400).send({ status: "failed", message: "Invalid Partner Key" });
       } else {
-        // If the user exists, update their data
-        res.status(200).send({ data: savedData, message: "Data  successfully" });
-        
+        // You can use the 'name' parameter as needed
+        // Example: Look up a user in the database using the 'name'
+        const user = await Config.findOne({ clientName: clientName });
+        console.log(user)
+        if (!user) {
+          return res.status(404).send({ status: "failed", message: "User not found" });
+        }
+
+        res.status(200).send({ status: "success", data: user, message: "Data successfully" });
       }
     } catch (error) {
-      res.status(500).send({ message: "Internal Server Error" + error.message });
+      res.status(500).send({ status: "failed", message: "Internal Server Error: " + error.message });
     }
-  });
+});
 module.exports = router;
