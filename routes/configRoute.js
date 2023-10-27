@@ -17,11 +17,13 @@ router.post("/add-update", async (req, res) => {
   
     try {
       // Find the user by their name
+      console.log({req:req});
       if(!req.body.clientName){
         res.status(400).send({status:"failed",message:"Invalid Input"});
       }
       const user = await Config.findOne({ clientName: req.body.clientName });
       console.log({body:req.body});
+      console.log({req:req});
       if (!user) {
         // If the user does not exist, you can create a new user with the provided data
         const newUser = new Config(req.body);
@@ -70,7 +72,7 @@ router.post("/add-update", async (req, res) => {
         const user = await Config.findOne({ clientName: clientName });
         console.log(user)
         if (!user) {
-          return res.status(404).send({ status: "failed", message: "User not found" });
+          return res.status(404).send({ status: "failed", message: "Client not found" });
         }
 
         res.status(200).send({ status: "success", data: user, message: "Data successfully" });
