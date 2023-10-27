@@ -17,6 +17,9 @@ router.post("/add-update", async (req, res) => {
   
     try {
       // Find the user by their name
+      if(!req.body.clientName){
+        res.status(400).send({status:"failed",message:"Invalid Input"});
+      }
       const user = await Config.findOne({ clientName: req.body.clientName });
       console.log({body:req.body});
       if (!user) {
