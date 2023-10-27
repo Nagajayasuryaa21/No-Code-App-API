@@ -1,0 +1,32 @@
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Environment variables
+.env
+
+# Built files
+dist/
+build/
+
+# Editor/IDE settings
+.vscode/
+.idea/
+*.code-workspace
+
+# Dependency lock files
+yarn.lock
+
+# System files
+Desktop.ini
+$RECYCLE.BIN/
+ehthumbs.db
+Icon?
+
+# User-specific files
+.DS_Store
