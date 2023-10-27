@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "engines": {
+    "node": "14.x"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -18,7 +21,7 @@
     "joi-password-complexity": "^5.1.0",
     "jsonwebtoken": "^9.0.0",
     "mongodb": "^6.2.0",
-    "mongoose": "^7.0.3",
+    "mongoose": "^7.6.3",
     "socks": "^2.7.1"
   }
 }
