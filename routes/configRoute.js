@@ -18,7 +18,7 @@ router.post("/add-update", async (req, res) => {
     try {
       // Find the user by their name
       const user = await Config.findOne({ clientName: req.body.clientName });
-  
+      console.log({body:req.body});
       if (!user) {
         // If the user does not exist, you can create a new user with the provided data
         const newUser = new Config(req.body);
