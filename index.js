@@ -4,7 +4,7 @@ const app = express();
 const cors = require("cors");
 const connection = require("./db");
 const authRoutes = require("./routes/auth");
-// const airportRoutes = require("./routes/airports");
+const configRoutes = require("./routes/configRoute");
 
 // database connection
 connection();
@@ -15,7 +15,7 @@ app.use(cors());
 
 // routes
 app.use("/api/auth", authRoutes);
-// app.use("/api/air", airportRoutes);
+app.use("/api/config", configRoutes);
 
 const port = process.env.PORT;
 if (port) {
