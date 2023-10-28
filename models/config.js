@@ -18,6 +18,16 @@ const mongoose = require("mongoose");
         kaptureLogo: Boolean,
         dataBroImage: Boolean,
         appointmentSchedule: Boolean,
+        todaysFeed: Boolean,
+        scheduledTicket: Boolean,
+        pendingTicket: Boolean,
+        allocatedTicket: Boolean,
+        enableTickets: Boolean,
+        enableStocks: Boolean,
+        enableCalendar: Boolean,
+        enableSyncNow: Boolean,
+        enableSettings: Boolean,
+        enableLogout: Boolean
       }
     }
   });

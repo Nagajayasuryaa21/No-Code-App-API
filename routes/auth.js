@@ -2,6 +2,7 @@ const router = require("express").Router();
 const {Admin } = require("../models/user");
 const bcrypt = require("bcryptjs");
 const Joi = require("joi");
+const { Config } = require("../models/config");
 
 router.get("/", (req, res) => {
   res.send("WELCOME TO NO-CODE APP API");
@@ -28,8 +29,7 @@ router.post("/log", async (req, res) => {
     const validPassword = bcrypt.compareSync(req.body.password, user.password);
     if (!validPassword)
       return res.status(401).send( "Invalid Email or Password" );
-      
-    res.status(200).send({ message: "logged in successfully",userId:user._id });
+    res.status(200).send({ message: "logged in successfully",userId:user._id ,clientName:user.firstName});
   } catch (error) {
     res.status(500).send({ message: "Internal Server Error" + error.message });
   }
@@ -42,6 +42,34 @@ const validate = (data) => {
   });
   return schema.validate(data);
 };
+
+const defaultConfig = {
+  clientName: "",
+  configJson: {
+    loginScreen: {
+      forgetPassword: false,
+      defaultLogin: true,
+      googleLogin: false,
+      microsoftLogin: false
+    },
+    homeScreen: {
+      kaptureLogo: true,
+      dataBroImage: true,
+      appointmentSchedule: true,
+      todaysFeed: true,
+      scheduledTicket: true,
+      pendingTicket: true,
+      allocatedTicket: true,
+      enableTickets: true,
+      enableStocks: true,
+      enableCalendar: true,
+      enableSyncNow: true,
+      enableSettings: true,
+      enableLogout: true
+    }
+  }
+};
+
 router.post("/register", async (req, res) => {
   res.setHeader('Access-Control-Allow-Credentials', true)
   res.setHeader('Access-Control-Allow-Origin', '*')
@@ -66,13 +94,22 @@ router.post("/register", async (req, res) => {
     await new Admin({ ...req.body, password: hashedPassword })
       .save()
       .then((savedData) => {
-        res.status(200).send({data:savedData,message:"Registered successfully"});
+        
+        //res.status(200).send({data:savedData,message:"Registered successfully"});
         
       })
       .catch((error) => {
         console.error(error);
         res.status(500).send("Internal server error");
       });
+    await new Config({...defaultConfig,clientName:req.body.firstName})
+    .save()
+    .then((savedData)=>{
+      res.status(200).send({data:savedData,message:"Registered successfully"});
+    }).catch((error)=>{
+      console.error(error);
+        res.status(500).send("Internal server error");
+    })
   } catch (error) {
     console.log(error)
     res.status(500).send({ message: "Internal Server Error" });
