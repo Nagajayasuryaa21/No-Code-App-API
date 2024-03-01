@@ -5,7 +5,7 @@ const cors = require("cors");
 const connection = require("./db");
 const authRoutes = require("./routes/auth");
 const configRoutes = require("./routes/configRoute");
-
+const flutterConfigRoutes = require("./routes/flutterRouter");
 // database connection
 connection();
 
@@ -16,6 +16,7 @@ app.use(cors());
 // routes
 app.use("/api/auth", authRoutes);
 app.use("/api/config", configRoutes);
+app.use("/api/flutter",flutterConfigRoutes)
 
 const port = process.env.PORT;
 if (port) {
